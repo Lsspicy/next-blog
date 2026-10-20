@@ -1,24 +1,25 @@
 import { searchPosts } from "@/data/posts";
 import { PostList } from "@/components/post-list";
+import { Suspense } from "react";
 
-export default function BlogIndex({
-  searchParams,
-}: {
-  searchParams: Promise<{ q?: string }>;
-}) {
-  return <BlogIndexContent searchParams={searchParams} />;
-}
-
-async function BlogIndexContent({
-  searchParams,
-}: {
-  searchParams: Promise<{ q?: string }>;
-}) {
-  const { q } = await searchParams;
-  const posts = searchPosts(q ?? "");
-
+export default function BlogIndex() {
   return (
     <main className="mx-auto max-w-3xl px-6 py-12">
+      <Suspense fallback={<p className="text-zinc-500">加载中…</p>}>
+        <BlogContent />
+      </Suspense>
+    </main>
+  );
+}
+
+async function BlogContent() {
+  const { searchParams } = await import("next/headers");
+  const params = await searchParams();
+  const q = (params.q as string) ?? "";
+  const posts = searchPosts(q);
+
+  return (
+    <>
       {q ? (
         <>
           <h1 className="text-2xl font-bold tracking-tight mb-2">
@@ -37,6 +38,6 @@ async function BlogIndexContent({
       ) : (
         <p className="text-zinc-500">没有找到相关文章</p>
       )}
-    </main>
+    </>
   );
 }
