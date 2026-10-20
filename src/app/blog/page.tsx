@@ -1,22 +1,26 @@
 import { searchPosts } from "@/data/posts";
 import { PostList } from "@/components/post-list";
-import { Suspense } from "react";
+import { Suspense, use } from "react";
 
-export default function BlogIndex() {
+export default function BlogIndex(props: {
+  searchParams: Promise<{ q?: string }>;
+}) {
   return (
     <main className="mx-auto max-w-3xl px-6 py-12">
       <Suspense fallback={<p className="text-zinc-500">加载中…</p>}>
-        <BlogContent />
+        <BlogContent searchParams={props.searchParams} />
       </Suspense>
     </main>
   );
 }
 
-async function BlogContent() {
-  const { searchParams } = await import("next/headers");
-  const params = await searchParams();
-  const q = (params.q as string) ?? "";
-  const posts = searchPosts(q);
+function BlogContent({
+  searchParams,
+}: {
+  searchParams: Promise<{ q?: string }>;
+}) {
+  const { q } = use(searchParams);
+  const posts = searchPosts(q ?? "");
 
   return (
     <>
