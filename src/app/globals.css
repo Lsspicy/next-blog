@@ -23,3 +23,31 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* rehype-pretty-code 代码块样式 */
+pre {
+  @apply rounded-lg overflow-x-auto;
+}
+
+pre code {
+  @apply text-sm leading-relaxed;
+}
+
+pre [data-line] {
+  @apply px-4;
+}
+
+pre [data-line-numbers] {
+  @apply pl-2;
+}
+
+pre [data-line-numbers] > [data-line]::before {
+  counter-increment: line;
+  content: counter(line);
+  display: inline-block;
+  width: 1rem;
+  margin-right: 1rem;
+  text-align: right;
+  color: rgb(113 113 122);
+  user-select: none;
+}
