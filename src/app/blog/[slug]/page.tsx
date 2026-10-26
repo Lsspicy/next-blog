@@ -11,7 +11,7 @@ import { getComments } from "./actions";
 import CommentForm from "@/components/comment-form";
 
 const prettyCodeOptions = {
-  theme: "github-dark",
+  theme: "github-dark" as const,
   keepBackground: false,
 };
 
